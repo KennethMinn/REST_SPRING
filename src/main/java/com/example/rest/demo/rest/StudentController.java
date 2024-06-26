@@ -19,33 +19,11 @@ public class StudentController {
         students.add(new Student("Kenneth"));
         return students;
     }
-
-    @GetMapping("/students/{studentId}")
+    @GetMapping("/students/{studentId}") //must match
     public Student getStudent(@PathVariable int studentId){
         if( studentId >= students.size() || studentId < 0){
             throw new StudentNotFoundException("Student id not found : " + studentId);
         }
         return students.get(studentId);
-    }
-
-
-    @ExceptionHandler //exception handler
-    public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exc){
-        StudentErrorResponse error = new StudentErrorResponse();
-        error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setMessage(exc.getMessage());
-        error.setTimeStamp(System.currentTimeMillis());
-
-        return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler //for any type of exception
-    public ResponseEntity<StudentErrorResponse> handleException(Exception exc){
-        StudentErrorResponse error = new StudentErrorResponse();
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage(exc.getMessage());
-        error.setTimeStamp(System.currentTimeMillis());
-
-        return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
     }
 }
